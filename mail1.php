@@ -1,36 +1,50 @@
 <?php
-
-$json = file_get_contents('php://input');
-$data = json_decode($json);
-
-
+//  var_dump($_POST);
+//  var_dump($_FILES);
+//  exit;
+// $json = file_get_contents('php://input');
+// $data = json_decode($json);
     
-        $name = $data->name;
-        $email = $data->email;
-        $subject = $data->subject;
-        $message = $data->message;
+//        // $name = $data->name;
+//         echo "test";
+//         print_r($json);
+//         exit;
+//         $email = $data->email;
+//         $subject = $data->subject;
+//         $message = $data->message;
         
+       
+
+        $name = $_POST['name'];
+        $email = $_POST['email'];
+        $subject = $_POST['subject'];
+        $message = $_POST['message'];  
+        $resume=$_FILES['resume'];    
+        
+        
+      
+
         $error=false;
-        $errormessage = array();
+        // $errormessage = array();
         $errmsg = "";
 
         if($name == "" ){
-            $errormessage[0] = "Name is empty";
+            // $errormessage[0] = "Name is empty";
             $errmsg = "Name is empty";
             $error = true;
         }
         if($email == ""){
-            $errormessage[1] = "Email is empty";
+            // $errormessage[1] = "Email is empty";
             $errmsg = $errmsg . "<br>Email is empty";
             $error = true;
         }
         if($subject == ""){
-            $errormessage[2] = "Subject is empty";
+            // $errormessage[2] = "Subject is empty";
             $errmsg = $errmsg . "<br>Subject is empty";
             $error = true;
         }
         if($message == ""){
-            $errormessage[3] = "Message is empty";
+            // $errormessage[3] = "Message is empty";
             $errmsg = $errmsg . "<br>Message is empty";
             $error = true;
         }
@@ -61,6 +75,21 @@ $data = json_decode($json);
                     );
                             }
                         else{
+                            
+                            $target_dir = "resumes/";
+                            $target_file = $target_dir . basename($_FILES["resume"]["name"]);
+                            $uploadOk = 1;
+                            $fileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+                           
+                            if (move_uploaded_file($_FILES["resume"]["tmp_name"], $target_file)) {
+                                echo "The file ". htmlspecialchars( basename( $_FILES["resume"]["name"])). " has been uploaded.";
+                              } else {
+                                echo "Sorry, there was an error uploading your file.";
+                              }
+                    
+
+
+
                         $sql = "INSERT INTO `contact` (`id`,`name`, `email`, `subject`,`message`)
                         VALUES (NULL,'$name', '$email', '$subject','$message')";
                             }
