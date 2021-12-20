@@ -380,17 +380,8 @@
       const formEl = document.forms[0];
 
       formEl.addEventListener("submit", function(event) {
-        event.preventDefault();
-       
-        //    var data = new FormData()
-     
-        // data.append('name',document.getElementById('name').value);
-        // data.append('email',document.getElementById('email').value);
-        // data.append('subject',document.getElementById('subject').value);
-        // data.append('message',document.getElementById('message').value);
-        // data.append('resume',document.getElementById('resume').value);
-
-        // console.log(data);
+        event.preventDefault();     
+        
 
         var formData = new FormData();
  for (var i = 0; i < formEl.length; ++i) {
@@ -420,6 +411,7 @@
               document.getElementById("email").value = "";
               document.getElementById("subject").value = "";
               document.getElementById("message").value = "";
+              document.getElementById("resume").value = "";
             }
             document.querySelector(".status").innerHTML = receivedData.message;
           })

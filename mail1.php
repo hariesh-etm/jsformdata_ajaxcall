@@ -5,7 +5,12 @@
         $email = $_POST['email'];
         $subject = $_POST['subject'];
         $message = $_POST['message'];  
-        $resume=$_FILES['resume'];    
+        $resume=$_FILES['resume'];   
+        
+        $target_dir = "resumes/";
+        $target_file = $target_dir . basename($_FILES["resume"]["name"]);
+        $uploadOk = 1;
+        //$fileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
            
         $error=false;
         // $errormessage = array();
@@ -31,6 +36,35 @@
             $errmsg = $errmsg . "<br>Message is empty";
             $error = true;
         }
+         // Check if file already exists
+         if (file_exists($target_file)) {
+            $errmsg = $errmsg. "Sorry, file already exists.";
+            $uploadOk = 0;
+        }
+        
+        // Check file size
+        if ($_FILES["fileToUpload"]["size"] > 500000) {
+            $errmsg = $errmsg. "Sorry, your file is too large.";
+            $uploadOk = 0;
+            $error = true;
+        }
+        
+        // // Allow certain file formats
+        // if($imageFileType != "pdf" && $imageFileType != "docs" && $imageFileType != "docx" && $imageFileType != "doc") {
+        //     $errmsg = $errmsg. "Sorry, Your file is not a document";
+        //     $uploadOk = 0;
+        //     $error = true;
+        // }
+        
+        
+       
+        if (move_uploaded_file($_FILES["resume"]["tmp_name"], $target_file)) {
+            // echo "The file ". htmlspecialchars( basename( $_FILES["resume"]["name"])). " has been uploaded.";
+          } else {
+            $error = true;
+            $errmsg = $errmsg. "Sorry, there was an error uploading your file.";
+          }
+
 
         if($error){
             $data = array(
@@ -57,22 +91,7 @@
                         'message' => "Error: " . $sql . "<br>" . mysqli_error($conn)
                     );
                             }
-                        else{
-                            
-                            $target_dir = "resumes/";
-                            $target_file = $target_dir . basename($_FILES["resume"]["name"]);
-                            $uploadOk = 1;
-                            //$fileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
-                            
-                           
-                            if (move_uploaded_file($_FILES["resume"]["tmp_name"], $target_file)) {
-                                // echo "The file ". htmlspecialchars( basename( $_FILES["resume"]["name"])). " has been uploaded.";
-                              } else {
-                                echo "Sorry, there was an error uploading your file.";
-                              }
-                    
-
-
+                        else{          
 
                         $sql = "INSERT INTO `contact` (`id`,`name`, `email`, `subject`,`message`,`resume`)
                         VALUES (NULL,'$name', '$email', '$subject','$message','$target_file')";
